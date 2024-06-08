@@ -2,6 +2,8 @@
 import pandas as pd 
 import numpy as np
 import random as rd
+import matplotlib.pyplot as plt
+import seaborn as sns 
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
@@ -14,11 +16,12 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from xgboost import XGBClassifier
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.svm import SVC
 
 # Loading CSV
-trainX_df = pd.read_csv("dataset/train_x1.csv")
-trainY_df = pd.read_csv("dataset/train_y1.csv")
-testX_df = pd.read_csv("dataset/test_x1.csv")
+trainX_df = pd.read_csv("train_x.csv")
+trainY_df = pd.read_csv("train_y.csv")
+testX_df = pd.read_csv("test_x.csv")
 
 # Filling Null Values
 trainX_df.Expense.fillna(trainX_df.Expense.mode()[0], inplace = True)
@@ -42,9 +45,9 @@ testX_df['Loan type'].replace(['A', 'B'], [0, 1], inplace = True)
 testX_df['Occupation type'].replace(['X', 'Y', 'Z'], [0, 1, 2], inplace = True)
 
 # Correlation Analysis
-correlation_matrix = trainX_df.corr()
+corr_matrix = trainX_df.corr()
 plt.figure(figsize=(12, 8))
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
 plt.show()
 
 # Splitting into Test and Training Sets
@@ -119,7 +122,7 @@ print(f"F1_score: {round(f1_score(Y_test, labels), 4)}")
 
 #Support Vector Machine 
 
-SVM = svm.SVC(kernel='linear')
+SVM = SVC(kernel='linear')
 SVM.fit(X_train,Y_train)
 labels= SVM.predict(X_test)
 
